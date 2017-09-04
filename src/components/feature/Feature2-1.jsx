@@ -5,6 +5,8 @@ import React, {
 import { browserHistory } from 'react-router'
 import { Link } from 'dva/router';
 import FormG from '../common/FormG';
+import SubSider from '../../components/sider/Sider';
+import config from '../../config';
 import { Layout, Tree, Table, Tabs, Button, Card, Menu, Icon, Modal } from 'antd'
 const { Header, Footer, Sider, Content } = Layout
 const TreeNode = Tree.TreeNode
@@ -20,7 +22,8 @@ export default class Feature extends Component {
     super(props)
 
     this.state = {
-      data: []
+      data: [],
+      siderInfo: config.sider
     }
     seft = this;
     this.Uiproject_List()
@@ -148,16 +151,38 @@ export default class Feature extends Component {
 
     const MeduleInfo = {
       opName: "Ul工程项目添加",
-      serverType: "Ulproject_Add",
-      uDevModelUUID: "0"
+      modleName: "UIproject",
+      op: "_Add",
+      uDevModelUUID: "0",
+      CType: [
+          {
+              name: 'uDevModelUUID',
+              label: '唯一标示',
+              type: 'string',
+              placeholder: '请输入PL工程名称',
+              rules: [{ required: true, min: 1, message: '用户名至少为 1 个字符' }]
+          },
+          {
+              name: 'strUIProjectName',
+              label: '工程名',
+              type: 'string',
+              placeholder: '请输入PL工程名称',
+              rules: [{ required: true, min: 5, message: '用户名至少为 5 个字符' }]
+          }
+      ]
     }
+
+
 
     const operations = FormG(MeduleInfo);
 
     return (
+      <div>
+          <SubSider {...this.state.siderInfo}/>
           <Tabs defaultActiveKey="1"
                 onChange={this.onchangeHandle_callback}
-                tabBarExtraContent={operations}>
+                tabBarExtraContent={operations}
+                style={{ marginLeft: '239px'}}>
            <TabPane tab="全部" key="1">
              <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
            </TabPane>
@@ -171,6 +196,7 @@ export default class Feature extends Component {
              <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
            </TabPane>
           </Tabs>
+      </div>
     )
   }
 }

@@ -26,17 +26,15 @@ let CFormItem = React.createClass({
         const item = this.props.item || {};
 
         let defaultValue = item.defaultValue || '';
-
+        console.log('CFormItem===========', item)
         switch (item.type){
             case 'string':
-                return <FormItem
-                            label={item.label}
-                            key={item.name}
-                            {...formItemLayout}>
-
-                            {getFieldDecorator(item.name, {rules:item.rules, initialValue:defaultValue})(
-                                <Input placeholder={item.placeholder||'' } style={{ width: item.width }} />
-                            )}
+                return <FormItem label={item.label}
+                                 key={item.name}
+                                 {...formItemLayout}>
+                                {getFieldDecorator(item.name, {rules:item.rules, initialValue:defaultValue})(
+                                    <Input placeholder={item.placeholder||'' } style={{ width: item.width }} />
+                                )}
                         </FormItem>
                 break;
 
@@ -59,7 +57,6 @@ let CFormItem = React.createClass({
                             label={item.label}
                             key={item.name}
                             {...formItemLayout}>
-
                             {getFieldDecorator(item.name, { initialValue: defaultValue })(
                                 <Select style={{ width: item.width }} onChange={item.onChange || function(){}}>
                                     {

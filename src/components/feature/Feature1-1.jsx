@@ -4,7 +4,10 @@ import React, {
 import { browserHistory } from 'react-router'
 import { Link } from 'dva/router';
 import FormG from '../common/FormG';
+import SubSider from '../../components/sider/Sider';
+import config from '../../config';
 import { ButtonToolbar, Panel } from 'react-bootstrap';
+
 import { Layout, Tree, Table, Tabs, Tag, Button, Card, Menu, Icon, Row, Col, Modal, message } from 'antd'
 const { Header, Footer, Sider, Content } = Layout
 const TreeNode = Tree.TreeNode
@@ -26,7 +29,8 @@ export default class Feature extends Component {
 
     this.state = {
       data: [],
-      show: false
+      show: false,
+      siderInfo: config.sider
     }
     seft = this;
     this.Plproject_List()
@@ -40,12 +44,8 @@ export default class Feature extends Component {
     console.log('selected', selectedKeys, info);
   }
 
-  handleClick = (e) => {
-    if(e.key == 5){
-      browserHistory.push('/Feature1-1')
-    } else {
-      browserHistory.push('/Feature1-2')
-    }
+  reRrash = (selectedKeys, info) => {
+    this.forceUpdate()
   }
 
   Plproject_List = (e) => {
@@ -54,7 +54,6 @@ export default class Feature extends Component {
       }
 
       this.DoPost_Project("Plproject_List",obj,function(res){
-          console.log('Plproject_List=====', res)
           var Pl_list = res.obj || []
           var templist = []
           Pl_list.forEach(function(item, index){
@@ -82,7 +81,6 @@ export default class Feature extends Component {
 
         var req = new TRequest();
 
-        console.log(func);
         // exec : function (url, op, obj, cb, err)
         req.exec(url, func, obj,
             // success:
@@ -102,7 +100,6 @@ export default class Feature extends Component {
   }
 
   HandleViewPl = (uPLProjectUUID) => {
-    console.log(uPLProjectUUID)
     var url = 'http://dev.top-link.me/pl/?id='+ uPLProjectUUID;
     var win = window.open(url, '_blank');
     win.focus()
@@ -121,13 +118,10 @@ export default class Feature extends Component {
   }
 
   HandleDeletePl = (uPLProjectUUID) => {
-    console.log('uPLProjectUUID=======', uPLProjectUUID)
     confirm({
       title: '你确定要删除此条目?',
       content: '删除之后不可恢复',
       onOk() {
-        console.log('OK');
-
         message.success('成功删除');
       },
       onCancel() {
@@ -137,7 +131,6 @@ export default class Feature extends Component {
   }
 
   render() {
-    console.log('this.state===',this.state)
     const columns = [{
       title: '工程名称',
       dataIndex: 'strPLProjectName',
@@ -163,7 +156,6 @@ export default class Feature extends Component {
     // rowSelection object indicates the need for row selection
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       },
       getCheckboxProps: record => ({
         disabled: record.name === 'Disabled User',    // Column configuration not to be checked
@@ -172,17 +164,35 @@ export default class Feature extends Component {
 
     const MeduleInfo = {
       opName: "PL工程添加",
-      serverType: "Plproject_Add",
-      uDevModelUUID: "0"
+      modleName: 'Plproject',
+      op: "_Add",
+      CType: [
+          {
+              name: 'uDevModelUUID',
+              label: '唯一标示',
+              type: 'string',
+              placeholder: '请输入PL工程名称',
+              rules: [{ required: true, min: 1, message: '用户名至少为 1 个字符' }]
+          },
+          {
+              name: 'strPLProjectName',
+              label: '工程名',
+              type: 'string',
+              placeholder: '请输入PL工程名称',
+              rules: [{ required: true, min: 5, message: '用户名至少为 5 个字符' }]
+          }
+      ]
     }
 
     const operations = FormG(MeduleInfo);
 
     return (
         <div>
+          <SubSider {...this.state.siderInfo}/>
           <Tabs defaultActiveKey="1"
                 onChange={this.onchangeHandle_callback}
-                tabBarExtraContent={operations}>
+                tabBarExtraContent={operations}
+                style={{ marginLeft: '239px'}}>
              <TabPane tab="全部" key="1">
                <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
              </TabPane>

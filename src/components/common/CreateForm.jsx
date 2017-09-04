@@ -1,16 +1,23 @@
 import React from 'react';
-import { Form, Modal, Button } from 'antd';
+import { browserHistory } from 'react-router'
+import { Form, Modal, Button, message } from 'antd';
 import CFormItem from './CreateFormItem';
+import { plInfo, HandleCreate } from '../../server'
+
+let MeduleInfo
+let self
 
 let CForm = React.createClass({
+
     getInitialState: function() {
         return { visible: false }
     },
 
     render: function() {
-        const self = this;
-        const CType = this.props.CType;
-        const MeduleInfo = this.props.MeduleInfo
+
+        MeduleInfo = this.props.MeduleInfo
+        const CType = MeduleInfo.CType;
+        console.log('CType=====',CType)
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: { span: 4 },
@@ -23,9 +30,9 @@ let CForm = React.createClass({
                   <Modal title={MeduleInfo.opName} visible={this.state.visible} onOk={this.handleCreate} onCancel={this.hideModal}>
                     <Form layout="horizontal">
                       {
-                        CType.map(function(item){
+                        CType.map(function(item, index){
                           //return self.dealConfigCType(item);
-                          return <CFormItem key={item.name} getFieldDecorator={getFieldDecorator} formItemLayout={formItemLayout} item={item}/>
+                          return <CFormItem key={index} getFieldDecorator={getFieldDecorator} formItemLayout={formItemLayout} item={item}/>
                         })
                       }
                     </Form>
@@ -36,20 +43,27 @@ let CForm = React.createClass({
 
     handleCreate: function(){
 
-        console.log('收到表单值：', this.props.form.getFieldsValue());
+        console.log('收到表单值: ', this.props.form.getFieldsValue());
 
         this.props.form.validateFields((errors, values) => {
+            self = this
             if (!!errors) {
-                console.log('Errors in form!!!');
+                message.info('表单格式不正确');
                 return;
-            }else{
-                console.log('Submit!!!');
-                this.props.submit(values);
-                this.hideModal();
+            } else {
+                HandleCreate(MeduleInfo, this.props.form.getFieldsValue(), function(){
+                  self.hideModal();
+                  message.success('操作成功');
+                  //window.location.reload()
+                },
+                function(){
+                  self.hideModal();
+                  message.info('提交失败');
+                }
+              )
             }
         });
         //this.props.submit(this.props.form.getFieldsValue());
-
     },
 
     handleReset: function() {

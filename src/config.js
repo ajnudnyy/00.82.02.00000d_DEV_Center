@@ -78,9 +78,9 @@ const Config = {
                 key: 'sub1',
                 icon: 'bars',
                 items: [
-                    {title: '牛头机械手', key: 'Feature4-1'},
-                    {title: '双控模温机', key: 'Feature3-2'},
-                    {title: '横走式单轴伺服机械手', key: 'Feature5-1'},
+                    {title: '牛头机械手', key: 'Feature2-1'},
+                    {title: '双控模温机', key: 'Feature3-3'},
+                    {title: '横走式单轴伺服机械手', key: 'Feature4-1'},
                 ]
             },
             {
@@ -89,7 +89,7 @@ const Config = {
                 icon: 'bars',
                 items: [
                     {title: '六自由度机器人', key: 'Feature5-2'},
-                    {title: 'SCARA机器人', key: 'Feature1-6'}
+                    {title: 'SCARA机器人', key: 'Feature5-1'}
                 ]
             },
             {
@@ -98,8 +98,8 @@ const Config = {
                 icon: 'bars',
                 items: [
                     {title: '模温机', key: 'Feature2-2'},
-                    {title: '干燥机', key: 'Feature2-1'},
-                    {title: '直接式吸料机', key: 'Feature1-5'},
+                    {title: '干燥机', key: 'Feature1-4'},
+                    {title: '直接式吸料机', key: 'Feature1-9'},
                 ]
             }
         ],

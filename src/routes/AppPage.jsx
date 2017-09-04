@@ -38,14 +38,6 @@ export default class App extends Component {
 
   }
 
-  handleClick = (e) => {
-    if(e.key == 5){
-      browserHistory.push('/Feature1-1')
-    } else {
-      browserHistory.push('/Feature1-2')
-    }
-  }
-
   showConfirm = () => {
     confirm({
       title: '你确定要删除此条目?',
@@ -116,13 +108,14 @@ export default class App extends Component {
 
         return  (
                   <Layout style={{ height: '100%' }}>
-                    <Sider collapsible
-                           collapsed={this.state.collapsible}
-                           onCollapse={this.onCollapse}>
-                      <div className="logo" style={{height: '32px',background: '#333',borderRadius: '6px',margin: '16px'}}>LOGO</div>
-                      <Menu
+                    <Sider
+                          collapsible
+                          collapsed={this.state.collapsible}
+                          onCollapse={this.onCollapse}>
+                          <div className="logo" style={{height: '32px',background: '#333',borderRadius: '6px',margin: '16px'}}>LOGO</div>
+                      <Menu onClick={this.handleMenuClick}
                             theme="dark"
-                            defaultSelectedKeys={['1']}
+                            defaultSelectedKeys={['2']}
                             defaultOpenKeys={['sub1']}
                             mode="inline">
                         <Menu.Item key="1">
@@ -132,7 +125,7 @@ export default class App extends Component {
                           </Link>
                         </Menu.Item>
                         <Menu.Item key="2">
-                          <Link to={'/Feature5-2'}>
+                          <Link to={'http://localhost:8989/App'}>
                            <Icon type="setting" className="icons"/>
                            <span>APP管理</span>
                           </Link>
@@ -145,6 +138,7 @@ export default class App extends Component {
                     <Layout style={{ backgroundColor: '#ffffff' }}>
                       <Header {...headerInfo}/>
                         <div style={{ margin: '0.4% 0.6%', height: '93.5%'}}>
+
                           <Main {...mainInfo} {...featureInfo} style={{height: '87%'}}/>
                         </div>
                       <Footer />

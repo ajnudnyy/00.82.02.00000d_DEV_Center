@@ -23,7 +23,6 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
 
-
 // 依赖 config 主题生成react 组件函数
 const FeatureSet = (config) => {
 
