@@ -42,7 +42,7 @@ let CForm = React.createClass({
     },
 
     handleCreate: function(){
-
+        
         console.log('收到表单值: ', this.props.form.getFieldsValue());
 
         this.props.form.validateFields((errors, values) => {

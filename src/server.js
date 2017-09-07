@@ -12,8 +12,8 @@ const plInfo = [
         OpName: 'Plproject_Add',
       },
       {
-        Op: '_DEL',
-        OpName: 'Plproject_DEL',
+        Op: '_Del',
+        OpName: 'Plproject_Del',
       }
     ]
   },
@@ -26,8 +26,8 @@ const plInfo = [
         OpName: 'Uiproject_Add',
       },
       {
-        Op: '_DEL',
-        OpName: 'Uiproject_DEL',
+        Op: '_Del',
+        OpName: 'Uiproject_Del',
       }
     ]
   }
@@ -56,6 +56,7 @@ const getParam = (MeduleInfo) => {
       if(plInfo[i].Pro == MeduleInfo.modleName){
         let OpItem = {}
         plInfo[i].Oplist.map(function(item){
+
           if (item.Op == MeduleInfo.op) {
             OpItem = item
             return
@@ -67,31 +68,20 @@ const getParam = (MeduleInfo) => {
             return plInfo[i].DC_url
           },
           getOp: function(){
+             console.log('OpItem==============', OpItem.OpName)
              return OpItem.OpName
-          },
-          // {getParams: function(dat){
-          //   const redat = {}
-          //   for(var _key in OpItem.params){
-          //     if (object.hasOwnProperty(_key)) {
-          //       for (var variable in dat) {
-          //         if (object.hasOwnProperty(variable) && _key = variable) {
-          //
-          //         }
-          //       }
-          //     }
-          //   }
-          //   return {
-          //     OpItem.params[g].: OpItem[g].value,
-          //
-          //   }
-          // }}
+          }
         }
     }
   }
 }
 
 function HandleCreate(MeduleInfo, dat, cb, failcb) {
-  console.log('dat ==============', dat)
+
+
+  let redat = dat
+  redat.uDevModelUUID = '0'
+  console.log('redat======', redat)
   DoPost(getParam(MeduleInfo).getDCurl(), getParam(MeduleInfo).getOp(), dat, cb, failcb);
 
 }

@@ -19,6 +19,7 @@ import Login from '../components/login/Login';
 let seft
 
 export default class App extends Component {
+
   constructor(props) {
     super(props)
 
@@ -87,12 +88,13 @@ export default class App extends Component {
   }
 
   render() {
-
+    let featureId = this.props.params.FeatureId || config.sider.selectedKey;
     //const components = config.main.components;
     const headerInfo = {
         ...config.header,
         name: config.userInfo.name,
-        aver: config.userInfo.aver
+        aver: config.userInfo.aver,
+        title: config.main.components[featureId].title
     }
 
     const siderInfo = { ...config.sider };
@@ -105,7 +107,7 @@ export default class App extends Component {
         permission: config.userInfo.permission,
         loginUrl: config.userInfo.loginUrl
     }
-        let featureId = this.props.params.FeatureId || config.sider.selectedKey;
+
 
         let featureInfo = {
             featureId: featureId,
@@ -113,7 +115,7 @@ export default class App extends Component {
             feature: config.main.components[featureId].component,
             title: config.main.components[featureId].title,
         }
-
+        console.log('config.main.components[featureId].title==========', config.main.components[featureId].title)
         return  (
                   <Layout style={{ height: '100%' }}>
                     <Sider collapsible
@@ -143,10 +145,8 @@ export default class App extends Component {
                       </Menu>
                     </Sider>
                     <Layout style={{ backgroundColor: '#ffffff' }}>
-                      <Header {...headerInfo}/>
-                        <div style={{ margin: '0.4% 0.6%', height: '93.5%'}}>
-                          <Main {...mainInfo} {...featureInfo} style={{height: '87%'}}/>
-                        </div>
+                      <Header {...headerInfo} {...featureInfo}/>
+                      <Main {...mainInfo} {...featureInfo} style={{height: '87%'}}/>
                       <Footer />
                     </Layout>
                   </Layout>

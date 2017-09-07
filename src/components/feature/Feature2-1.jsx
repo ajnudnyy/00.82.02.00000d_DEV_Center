@@ -118,25 +118,31 @@ export default class Feature extends Component {
   render() {
     console.log('this.state===',this.state)
     const columns = [{
-      title: '工程名称',
-      dataIndex: 'strUIProjectName',
-      render: text => <a href="#">{text}</a>,
-    }, {
-      title: '描述',
-      dataIndex: 'strUIProjectDescription',
-    }, {
-      title: '定价',
-      dataIndex: 'pricing',
-    }, {
-      title: '状态',
-      dataIndex: 'nUIProjectFlag',
-    }, {
-      title: '更新时间',
-      dataIndex: 'dtUIProjectUpdateTime_UTC',
-    }, {
-      title: '操作',
-      dataIndex: 'op',
-      render: text => <a href="#">查看</a>,
+        title: '工程名称',
+        dataIndex: 'strUIProjectName',
+        render: text => <a href="#">{text}</a>,
+      }, {
+        title: '描述',
+        dataIndex: 'strUIProjectDescription',
+      }, {
+        title: '定价',
+        dataIndex: 'pricing',
+      }, {
+        title: '状态',
+        dataIndex: 'nUIProjectFlag',
+      }, {
+        title: '更新时间',
+        dataIndex: 'dtUIProjectUpdateTime_UTC',
+      }, {
+        title: '操作',
+        dataIndex: 'uUIProjectUUID',
+        render: (text, record) => (
+          <span>
+            <a href=""+url+"">查看</a>
+            <span className="ant-divider" />
+            <a onClick={ () => { seft.HandleDeletePl( text ) } }>删除</a>
+          </span>
+        )
     }]
 
     // rowSelection object indicates the need for row selection
@@ -156,13 +162,6 @@ export default class Feature extends Component {
       uDevModelUUID: "0",
       CType: [
           {
-              name: 'uDevModelUUID',
-              label: '唯一标示',
-              type: 'string',
-              placeholder: '请输入PL工程名称',
-              rules: [{ required: true, min: 1, message: '用户名至少为 1 个字符' }]
-          },
-          {
               name: 'strUIProjectName',
               label: '工程名',
               type: 'string',
@@ -172,8 +171,6 @@ export default class Feature extends Component {
       ]
     }
 
-
-
     const operations = FormG(MeduleInfo);
 
     return (
@@ -182,7 +179,7 @@ export default class Feature extends Component {
           <Tabs defaultActiveKey="1"
                 onChange={this.onchangeHandle_callback}
                 tabBarExtraContent={operations}
-                style={{ marginLeft: '239px'}}>
+                style={{ }}>
            <TabPane tab="全部" key="1">
              <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
            </TabPane>

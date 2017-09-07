@@ -28,10 +28,10 @@
 
 const Config = {
     header: {
-        title: '测试配置管理后台',
+        title: 'APP管理后台',
         icon: 'appstore',
         style: {
-            backgroundColor: '#F5F5F5',
+            backgroundColor: 'rgb(255, 255, 255)',
             color: '#666'
         },
         menu: [
@@ -114,15 +114,15 @@ const Config = {
                 component: require('./components/feature/Feature1-1')
             },
             'Feature1-1': {
-                title: 'table 普通列表数据展示 前端处理分页',
+                title: 'PLproject',
                 component: require('./components/feature/Feature1-1')
             },
             'Feature1-1-1': {
-                title: 'table 普通列表数据展示 接口请求分页',
+                title: 'ULproject',
                 component: require('./components/feature/Feature1-1-1')
             },
             'Feature1-2': {
-                title: 'table 具有相关操作数据展示',
+                title: 'ULproject',
                 component: require('./components/feature/Feature1-2')
             },
             'Feature1-3': {
@@ -142,7 +142,7 @@ const Config = {
                 component: require('./components/feature/Feature1-6')
             },
             'Feature2-1': {
-                title: 'simple对象 数据展示',
+                title: 'ULproject',
                 component: require('./components/feature/Feature2-1')
             },
             'Feature2-2': {
@@ -170,7 +170,7 @@ const Config = {
                 component: require('./components/feature/Feature5-1')
             },
             'Feature5-2': {
-                title: '自定义组装',
+                title: '六轴机器人',
                 component: require('./components/feature/Feature5-2')
             }
         },

@@ -33,7 +33,7 @@ let CFormItem = React.createClass({
                                  key={item.name}
                                  {...formItemLayout}>
                                 {getFieldDecorator(item.name, {rules:item.rules, initialValue:defaultValue})(
-                                    <Input placeholder={item.placeholder||'' } style={{ width: item.width }} />
+                                  <Input placeholder={item.placeholder||'' } />
                                 )}
                         </FormItem>
                 break;

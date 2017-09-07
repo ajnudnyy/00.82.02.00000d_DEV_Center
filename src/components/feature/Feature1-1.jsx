@@ -7,6 +7,7 @@ import FormG from '../common/FormG';
 import SubSider from '../../components/sider/Sider';
 import config from '../../config';
 import { ButtonToolbar, Panel } from 'react-bootstrap';
+import { HandleCreate } from '../../server'
 
 import { Layout, Tree, Table, Tabs, Tag, Button, Card, Menu, Icon, Row, Col, Modal, message } from 'antd'
 const { Header, Footer, Sider, Content } = Layout
@@ -118,11 +119,26 @@ export default class Feature extends Component {
   }
 
   HandleDeletePl = (uPLProjectUUID) => {
+    const MeduleInfo = {
+      modleName: 'Plproject',
+      op: "_Del"
+    }
+    var dat = {
+      uPLProjectUUID : uPLProjectUUID || 0,    // 工程UUID
+    }
+
     confirm({
       title: '你确定要删除此条目?',
       content: '删除之后不可恢复',
       onOk() {
-        message.success('成功删除');
+        HandleCreate(MeduleInfo, dat, function(json){
+            message.success('删除成功');
+            window.location.reload()
+          },
+          function(){
+            message.info('删除失败');
+          }
+        )
       },
       onCancel() {
         message.info('取消删除');
@@ -168,13 +184,6 @@ export default class Feature extends Component {
       op: "_Add",
       CType: [
           {
-              name: 'uDevModelUUID',
-              label: '唯一标示',
-              type: 'string',
-              placeholder: '请输入PL工程名称',
-              rules: [{ required: true, min: 1, message: '用户名至少为 1 个字符' }]
-          },
-          {
               name: 'strPLProjectName',
               label: '工程名',
               type: 'string',
@@ -187,12 +196,12 @@ export default class Feature extends Component {
     const operations = FormG(MeduleInfo);
 
     return (
-        <div>
+        <div style={{height: '100%'}}>
           <SubSider {...this.state.siderInfo}/>
           <Tabs defaultActiveKey="1"
                 onChange={this.onchangeHandle_callback}
                 tabBarExtraContent={operations}
-                style={{ marginLeft: '239px'}}>
+                style={{ }}>
              <TabPane tab="全部" key="1">
                <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
              </TabPane>
