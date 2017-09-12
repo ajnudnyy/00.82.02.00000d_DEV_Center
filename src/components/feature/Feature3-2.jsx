@@ -4,10 +4,11 @@ import React from 'react';
 import FeatureSetConfig from '../common/FeatureSetConfig';
 import Reqwest from 'reqwest';
 
-const graph_conf2 = {
-    
-    type: 'graphList', // tableList graphList simpleObject complexObject 
-    style: {
+const graph_conf = {
+
+    type: 'graphList', // tableList graphList simpleObject complexObject
+
+    EchartStyle: {
         width: '100%',
         height: '450px'
     },
@@ -15,58 +16,67 @@ const graph_conf2 = {
     // 初始化展现的数据，使用callback 回传列表数据
     // 需要手动添加唯一id key
     // callback 组件数据的回调函数(接受列表数据参数)
-    // 将回调数据掺入option
     initData: function(callback){
 
         // 参考echarts 参数
         var option = {
-            title : {
-                text: '某站点用户访问来源',
-                subtext: '纯属虚构',
-                x:'center'
+            title: {
+                text: '堆叠区域图'
             },
             tooltip : {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                trigger: 'axis'
             },
             legend: {
-                orient: 'vertical',
-                left: 'left',
-                data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
-            }
-        }
-       
-        // 模拟数据
-        setTimeout(function(){
-            option.series = [
-                {
-                    name: '访问来源',
-                    type: 'pie',
-                    radius : '55%',
-                    center: ['50%', '60%'],
-                    data:[
-                        {value:335, name:'直接访问'},
-                        {value:310, name:'邮件营销'},
-                        {value:234, name:'联盟广告'},
-                        {value:135, name:'视频广告'},
-                        {value:1548, name:'搜索引擎'}
-                    ],
-                    itemStyle: {
-                        emphasis: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
-                    }
+                data:['模温机','干燥机','机器人']
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
                 }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+              {
+                  type : 'category',
+                  boundaryGap : false,
+                  data : ['中南区','华北区','华东区','华北区','西南大区','港台特别行政区','海外']
+              }
+            ],
+            yAxis : [
+              {
+                  type : 'value'
+              }
             ]
+        }
 
-            callback(option);
-       }, 500)
+       // 模拟数据
+       Reqwest({
+            url: '/api/example4',
+            data: {},
+
+            type: 'json',
+            success: function (data) {
+                option.series = data.data;
+
+                option.series.forEach(function(item) {
+                    item.type = 'line';
+                    item.stack = '总量';
+                });
+                option.series[0].name = '模温机'
+                option.series[1].name = '干燥机'
+                option.series[2].name = '机器人'
+                callback(option);
+            }
+        });
     }
 
 };
 
-const Feature = FeatureSetConfig(graph_conf2);
+const Feature = FeatureSetConfig(graph_conf);
 
 export default Feature;

@@ -138,7 +138,7 @@ export default class App extends Component {
                     <Layout style={{ backgroundColor: '#ffffff' }}>
                       <Header {...headerInfo}/>
                         <div style={{ margin: '0.4% 0.6%', height: '93.5%'}}>
-                        <Main {...mainInfo} {...featureInfo} style={{height: '87%'}}/>
+                          <Main {...mainInfo} {...featureInfo} style={{height: '87%'}}/>
                         </div>
                       <Footer />
                     </Layout>

@@ -115,6 +115,12 @@ export default class Feature extends Component {
     });
   }
 
+  HandleViewPl = (uULProjectUUID) => {
+    var url = 'http://dev.top-link.me/ul/?id='+ uULProjectUUID;
+    var win = window.open(url, '_blank');
+    win.focus()
+  }
+
   render() {
     console.log('this.state===',this.state)
     const columns = [{
@@ -138,7 +144,7 @@ export default class Feature extends Component {
         dataIndex: 'uUIProjectUUID',
         render: (text, record) => (
           <span>
-            <a href=""+url+"">查看</a>
+            <a onClick={ () => { seft.HandleViewPl( text ) } }>查看</a>
             <span className="ant-divider" />
             <a onClick={ () => { seft.HandleDeletePl( text ) } }>删除</a>
           </span>
@@ -175,24 +181,24 @@ export default class Feature extends Component {
 
     return (
       <div>
-          <SubSider {...this.state.siderInfo}/>
-          <Tabs defaultActiveKey="1"
-                onChange={this.onchangeHandle_callback}
-                tabBarExtraContent={operations}
-                style={{ }}>
-           <TabPane tab="全部" key="1">
-             <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
-           </TabPane>
-           <TabPane tab="已发布" key="2">
-             <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
-           </TabPane>
-           <TabPane tab="发布中" key="3">
-             <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
-           </TabPane>
-           <TabPane tab="已停止" key="4">
-             <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
-           </TabPane>
-          </Tabs>
+        <SubSider {...this.state.siderInfo}/>
+        <Tabs defaultActiveKey="1"
+              onChange={this.onchangeHandle_callback}
+              tabBarExtraContent={operations}
+              style={{ }}>
+         <TabPane tab="全部" key="1">
+           <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
+         </TabPane>
+         <TabPane tab="已发布" key="2">
+           <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
+         </TabPane>
+         <TabPane tab="发布中" key="3">
+           <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
+         </TabPane>
+         <TabPane tab="已停止" key="4">
+           <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
+         </TabPane>
+        </Tabs>
       </div>
     )
   }

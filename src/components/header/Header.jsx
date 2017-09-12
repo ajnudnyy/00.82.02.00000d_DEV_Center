@@ -46,8 +46,7 @@ function Header(props){
     return  <div style={props.style} className="header">
               <Row style={{display: 'flex', alignItems: 'center'}}>
                 <Col span={2} offset={1}><img src={LOGO} style={{ width: '64%', height: '33px' }}/></Col>
-                <Col span={3}><h5>{ props.title }</h5></Col>
-                <Col span={5} offset={8}>
+                <Col span={5} offset={11}>
                   <Search
                     placeholder="输入内容"
                     style={{ width: 300 }}

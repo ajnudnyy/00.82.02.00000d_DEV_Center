@@ -1,148 +1,204 @@
-// 含有可操作 table 栏的数据展示
-import React from 'react';
-import FeatureSetConfig from '../common/FeatureSetConfig';
-import Immutable from 'immutable';
-import Reqwest from 'reqwest';
 
-const conf = {
+import React, {
+  Component
+} from 'react'
+import { browserHistory } from 'react-router'
+import { Link } from 'dva/router';
+import FormG from '../common/FormG';
+import SubSider from '../../components/sider/Sider';
+import config from '../../config';
+import { Layout, Tree, Table, Tabs, Button, Card, Menu, Icon, Modal } from 'antd'
+const { Header, Footer, Sider, Content } = Layout
+const TreeNode = Tree.TreeNode
+const TabPane = Tabs.TabPane
+const SubMenu = Menu.SubMenu
+const MenuItemGroup = Menu.ItemGroup
+const confirm = Modal.confirm
+let seft
 
-    type: 'tableList',
+export default class Feature extends Component {
 
-    // 初始化页面的数据 回调函数传入 items 列表
-    initData: function(callback){
+  constructor(props) {
+    super(props)
+    console.log('props.siderInfo=======', props.siderInfo)
+    this.state = {
+      data: [],
+      siderInfo: props.siderInfo
+    }
+    seft = this;
+    this.Uiproject_List()
+  }
 
-        // 接口调用数据形式
-        Reqwest({
-            url: '/api/oneList',
-            data: {},
-            type: 'json',
-            success: function (data) {
-                let list = data.data;
-                list.forEach(function(ele) {
-                    ele.key =  ele.id;
-                });
-                callback(list);
-            }
-        });
-    },
+  onchangeHandle_callback = (key) => {
+    console.log(key)
+  }
 
-    columns: [
-        {
-            title: 'ID',
-            dataIndex: 'id',
-            type: 'string'
-        }, {
-            title: '邮箱',
-            dataIndex: 'email',
-            type: 'string'
-        }, {
-            title: '日期',
-            dataIndex: 'date',
-            type: 'string'
-        },{
-            title: '图片',
-            dataIndex: 'image',
-            type: 'image'
-        },{
-            title: 'ischange',
-            dataIndex: 'ischange',
-            type: 'string'
-        },{
-            title: 'rtype',
-            dataIndex: 'rtype',
-            type: 'string'
-        },{
-            title: 'stype',
-            dataIndex: 'stype',
-            type: 'string'
-        },{
-            title: '操作',
-            type: 'operate',    // 操作的类型必须为 operate
-            btns: [{
-                text: '更新',
-                type: 'update'
-            },{
-                text: '展示',
-                callback: function(item){
-                    console.log(item)
-                }
-            }], // 可选
+  onSelect = (selectedKeys, info) => {
+    console.log('selected', selectedKeys, info);
+  }
 
-        }
-    ],
+  handleClick = (e) => {
+    if(e.key == 5){
+      console.log('e.key=====', e.key)
+      windows.location.href = 'http://localhost:8989/#/Feature1-3?_k=6xoiy9';
+    } else {
+      console.log('e.key=====', e.key)
+      windows.location.href = 'http://localhost:8989/#/Feature1-2?_k=ihycok';
+    }
+  }
 
+  Uiproject_List = (e) => {
+      var obj = {
+          //uProjectUUID : 0 ,    // ¹¤³ÌUUID
+      };
 
-    Update:function(data, callback){
-        console.log(data);
+      this.DoPost_Project("Uiproject_List",obj,function(res){
+          console.log('Uiproject_List=====', res.obj)
+          var Ui_list = res.obj || []
+          var templist = []
+          Ui_list.forEach(function(item, index){
+            templist.push({
+                key: index,
+                strUIProjectName: item.strUIProjectName,
+                strUIProjectDescription: item.strUIProjectDescription,
+                pricing: '253.45',
+                nUIProjectFlag: item.nUIProjectFlag == 1 ? '开发中' : '已发布',
+                dtUIProjectUpdateTime_UTC: item.dtUIProjectUpdateTime_UTC,
+                op: '1'
+              })
+          })
 
-        // 这块请求更新数据 成功回调
-        data.key =  data.id;
-        callback(data);
-    },
+          seft.setState({
+             data: templist
+           })
+      });
+  }
 
+  DoPost_Project = (func,obj,cb) => {
+    var url = "http://dev.top-link.me/dev/Handler_Uiproject_V1.ashx";
+    return this.DoPost(url,func,obj,cb);
+  }
 
-    // 创建项目所需的字段 与 更新项目所需的字段
-    // rules 规范可见 https://github.com/yiminghe/async-validator
-    UType: [
-        {
-            name: 'id',
-            label: '唯一标识',
-            type: 'string',
-            placeholder: '请输入标示名称',
-            rules: [{ required: true, min: 5, message: '用户名至少为 5 个字符' }]
-        },{
-            name: 'email',
-            label: '唯一标识',
-            type: 'string',
-            placeholder: '请输入标示名称',
-            rules: [{ required: true, type: 'email', message: '请输入正确的邮箱地址' }]
-        },{
-            name: 'date',
-            label: '项目开始时间',
-            type: 'date',
-        },{
-            name: 'stype',
-            label: '项目类型Select',
-            type: 'select',
-            defaultValue: 'one',
-            options:[{
-                text: '选项一',
-                value: 'one'
-            },{
-                text: '选项二',
-                value: 'two'
-            },{
-                text: '选项三',
-                value: 'three'
-            }]
-        },{
-            name: 'rtype',
-            label: '项目类型Radio',
-            type: 'radio',
-            defaultValue: 'one',
-            options:[{
-                text: '选项一',
-                value: 'one'
-            },{
-                text: '选项二',
-                value: 'two'
-            },{
-                text: '选项三',
-                value: 'three'
-            }]
-        },{
-            name: 'ischange',
-            label: '是否过滤',
-            type: 'switch'
-        },{
-            name: 'image',
-            label: '背景图片',
-            type: 'imageUpload'
-        }
-    ]
+  DoPost = (url,func,obj,cb) => {
 
-};
+        var req = new TRequest();
 
-const Feature = FeatureSetConfig(conf);
+        console.log(func);
+        // exec : function (url, op, obj, cb, err)
+        req.exec(url, func, obj,
+            // success:
+            function (json){
 
-export default Feature;
+               cb(json);            //cbÊÇÒ»¸öº¯Êý£¬ÕâÀïµ÷ÓÃÁËÕâ¸öº¯Êý£¬È»ºó¸øÁË²ÎÊý¡£
+
+               return ;
+            },
+            // error:
+
+            function (json) {
+
+            });
+
+        return ;
+  }
+
+  showConfirm = () => {
+    confirm({
+      title: '你确定要删除此条目?',
+      content: '删除之后不可恢复',
+      onOk() {
+        console.log('OK');
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+
+  HandleViewPl = (uULProjectUUID) => {
+    var url = 'http://dev.top-link.me/ul/?id='+ uULProjectUUID;
+    var win = window.open(url, '_blank');
+    win.focus()
+  }
+
+  render() {
+    console.log('this.state===',this.state)
+    const columns = [{
+        title: '工程名称',
+        dataIndex: 'strUIProjectName',
+        render: text => <a href="#">{text}</a>,
+      }, {
+        title: '描述',
+        dataIndex: 'strUIProjectDescription',
+      }, {
+        title: '定价',
+        dataIndex: 'pricing',
+      }, {
+        title: '状态',
+        dataIndex: 'nUIProjectFlag',
+      }, {
+        title: '更新时间',
+        dataIndex: 'dtUIProjectUpdateTime_UTC',
+      }, {
+        title: '操作',
+        dataIndex: 'uUIProjectUUID',
+        render: (text, record) => (
+          <span>
+            <a onClick={ () => { seft.HandleViewPl( text ) } }>查看</a>
+            <span className="ant-divider" />
+            <a onClick={ () => { seft.HandleDeletePl( text ) } }>删除</a>
+          </span>
+        )
+    }]
+
+    // rowSelection object indicates the need for row selection
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      },
+      getCheckboxProps: record => ({
+        disabled: record.name === 'Disabled User',    // Column configuration not to be checked
+      }),
+    };
+
+    const MeduleInfo = {
+      opName: "Ul工程项目添加",
+      modleName: "UIproject",
+      op: "_Add",
+      uDevModelUUID: "0",
+      CType: [
+          {
+              name: 'strUIProjectName',
+              label: '工程名',
+              type: 'string',
+              placeholder: '请输入PL工程名称',
+              rules: [{ required: true, min: 5, message: '用户名至少为 5 个字符' }]
+          }
+      ]
+    }
+
+    const operations = FormG(MeduleInfo);
+    return (
+      <div>
+        <SubSider {...this.state.siderInfo}/>
+        <Tabs defaultActiveKey="1"
+              onChange={this.onchangeHandle_callback}
+              tabBarExtraContent={operations}
+              style={{ }}>
+         <TabPane tab="全部" key="1">
+           <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
+         </TabPane>
+         <TabPane tab="已发布" key="2">
+           <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
+         </TabPane>
+         <TabPane tab="发布中" key="3">
+           <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
+         </TabPane>
+         <TabPane tab="已停止" key="4">
+           <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
+         </TabPane>
+        </Tabs>
+      </div>
+    )
+  }
+}

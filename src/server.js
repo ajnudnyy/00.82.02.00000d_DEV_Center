@@ -35,7 +35,6 @@ const plInfo = [
 
 //函数也可以当成参数传递。
 function DoPost(url, func, obj, cb, failcb) {
-
   var req = new TRequest();
   req.exec(url, func, obj,
   // success:
@@ -44,7 +43,9 @@ function DoPost(url, func, obj, cb, failcb) {
     return;
   },
   // error:
-  function(json) { failcb(json) });
+  function(json) {
+    console.log('json=====', json)
+    failcb(json) });
   return;
 }
 
@@ -68,7 +69,6 @@ const getParam = (MeduleInfo) => {
             return plInfo[i].DC_url
           },
           getOp: function(){
-             console.log('OpItem==============', OpItem.OpName)
              return OpItem.OpName
           }
         }
@@ -77,13 +77,9 @@ const getParam = (MeduleInfo) => {
 }
 
 function HandleCreate(MeduleInfo, dat, cb, failcb) {
-
-
   let redat = dat
   redat.uDevModelUUID = '0'
-  console.log('redat======', redat)
   DoPost(getParam(MeduleInfo).getDCurl(), getParam(MeduleInfo).getOp(), dat, cb, failcb);
-
 }
 
 export {
@@ -91,4 +87,4 @@ export {
   getParam,
   DoPost,
   HandleCreate
-};
+}

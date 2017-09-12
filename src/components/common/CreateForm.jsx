@@ -16,8 +16,7 @@ let CForm = React.createClass({
     render: function() {
 
         MeduleInfo = this.props.MeduleInfo
-        const CType = MeduleInfo.CType;
-        console.log('CType=====',CType)
+        const CType = typeof MeduleInfo == 'undefined' ? this.props.CType : MeduleInfo.CType;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: { span: 4 },
@@ -42,7 +41,7 @@ let CForm = React.createClass({
     },
 
     handleCreate: function(){
-        
+
         console.log('收到表单值: ', this.props.form.getFieldsValue());
 
         this.props.form.validateFields((errors, values) => {

@@ -13,7 +13,6 @@ const FormG = (Info) => {
         // rules 规范可见 https://github.com/yiminghe/async-validator
 
     };
-    console.log('Info==========',Info)
     return  <CForm MeduleInfo={Info} CType={Info.CType}/>
 
 }
