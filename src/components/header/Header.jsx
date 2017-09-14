@@ -2,12 +2,14 @@ import React from 'react'
 import { Affix, Menu, Icon, Input, Row, Col, Dropdown, Button, Avatar, Modal } from 'antd'
 import { Link } from 'dva/router'
 import LOGO from './assets/TOP-STAR-LOGO.png'
+import SearchInput from '../common/SearchInput';
 
 const confirm = Modal.confirm
 const Search = Input.Search
 const SubMenu = Menu.SubMenu
 const DemoBox = props => <p className={`height-${props.value}`}>{props.children}</p>
 let seft
+
 const menu = (
   <Menu className="nav-dropmenu" style={{width: '270px'}}>
     <Menu.Item key="0">
@@ -46,11 +48,8 @@ function Header(props){
     return  <div style={props.style} className="header">
               <Row style={{display: 'flex', alignItems: 'center'}}>
                 <Col span={2} offset={1}><img src={LOGO} style={{ width: '64%', height: '33px' }}/></Col>
-                <Col span={5} offset={11}>
-                  <Search
-                    placeholder="输入内容"
-                    style={{ width: 300 }}
-                    onSearch={value => console.log(value)}/>
+                <Col span={7} offset={9}>
+                  <SearchInput />
                 </Col>
                 <Col span={2} offset={1}  style={{textAlign: 'right' }}>
                   <Icon type="question-circle-o" style={{fontSize: '15px', verticalAlign: 'text-bottom'}}/>

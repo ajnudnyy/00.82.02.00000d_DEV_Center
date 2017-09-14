@@ -1,6 +1,6 @@
  /**
   * @file CMS平台主文件
-  * @author niyingfeng<yingfeng.ni@gmail.com>
+  * @author 白航铭<gjeunney@163.com>
   * @doc https://github.com/dvajs/dva/blob/master/README_zh-CN.md
   */
 

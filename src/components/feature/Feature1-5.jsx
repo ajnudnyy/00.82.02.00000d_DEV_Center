@@ -6,6 +6,8 @@ import { browserHistory } from 'react-router'
 import { Link } from 'dva/router';
 import FormG from '../common/FormG';
 import SubSider from '../../components/sider/Sider';
+import FeatureSetConfig from '../common/FeatureSetConfig';
+import { DoPost, HandleCreateform } from '../../server'
 import config from '../../config';
 import { Layout, Tree, Table, Tabs, Button, Card, Menu, Icon, Modal } from 'antd'
 const { Header, Footer, Sider, Content } = Layout
@@ -16,17 +18,228 @@ const MenuItemGroup = Menu.ItemGroup
 const confirm = Modal.confirm
 let seft
 
-export default class Feature extends Component {
+
+const conf = {
+
+    type: 'tableList',
+
+    url: 'http://localhost:8810/admin/Handler_Product_V1.ashx',
+
+    // 初始化页面的数据 回调函数传入 items 列表
+    pageData: function(num, callback){
+
+        var dat = {
+          nPageSize: 8,
+          nPageIndex: num - 1,
+          strKeyWord: ''
+        }
+        console.log('dat.nPageIndex,==============', dat.nPageIndex)
+        DoPost(this.url, "product_list", dat ,function(res){
+            console.log('res========================', res)
+            var list = [], Ui_list = res.obj.objectlist || [], totalcount = res.obj.totalcount
+            Ui_list.forEach(function(item, index){
+              console.log('index=========', index)
+              list.push({
+                key: index,
+                strProductID: item.strProductID,
+                strProductModel: item.strProductModel,
+                strProductName_cn: item.strProductName_cn,
+                strProductDescription_cn: item.strProductDescription_cn,
+                strProductNote_cn: item.strProductNote_cn,
+              })
+            })
+            console.log('list==========', list)
+            const pagination = { ...seft.state.pagination }
+            // Read total count from server
+            // pagination.total = data.totalCount;
+            pagination.total = totalcount;
+            callback( list, {
+              total: pagination.total,
+              nPageSize: 8
+            })
+        }, function(error){
+
+          message.info(error);
+        })
+    },
+
+    columns: [
+        {
+            title: '型号',
+            dataIndex: 'strProductModel',
+            type: 'string'
+        }, {
+            title: '名称',
+            dataIndex: 'strProductName_cn',
+            type: 'string'
+        }, {
+            title: '描述',
+            dataIndex: 'strProductDescription_cn',
+            type: 'string'
+        },{
+            title: '备注',
+            dataIndex: 'strProductNote_cn',
+            type: 'string'
+        },{
+            title: '操作',
+            dataIndex: 'strProductID',
+            type: 'operate',    // 操作的类型必须为 operate
+            btns: [{
+              text: '更新',
+              type: 'update'
+            },{
+              text: '删除',
+              type: 'delete'
+            }], // 可选
+        }
+    ],
+    // 模拟添加数据的接口 回调
+    Create: function(data, callback){
+      let dat = {
+        key: '1000',
+        strProductModel: data.strProductModel,
+        strProductName_cn: data.strProductName_cn,
+        strProductDescription_cn: data.strProductDescription_cn,
+        strProductNote_cn: data.strProductNote_cn,
+      }
+
+      HandleCreateform( this.url, "system_customer_add", dat ,function(res){
+        //这块请求更新数据 成功回调
+        callback(dat);
+      })
+    },
+
+    //客户信息修改
+    Update:function(data, callback){
+      console.log('data============',data);
+      let dat = {
+        strProductID: data.strProductID,
+        strProductModel: data.strProductModel,
+        strProductName_cn: data.strProductName_cn,
+        strProductDescription_cn: data.strProductDescription_cn,
+        strProductNote_cn: data.strProductNote_cn
+      }
+
+
+
+      DoPost(this.url, "system_customer_update", dat ,function(res){
+        //这块请求更新数据 成功回调
+        callback(data)
+      })
+    },
+
+    // 删除操作
+    Delete: function(data, callback){
+      var dat = {
+        strProductID: data.strProductID
+      }
+
+      DoPost(this.url, "system_customer_del", dat ,function(res){
+        //这块请求更新数据 成功回调
+
+        callback(data)
+      })
+    },
+    // 创建项目所需的字段 与 更新项目所需的字段
+    // rules 规范可见 https://github.com/yiminghe/async-validator
+
+    UType: [
+        {
+          name: 'strProductCategoryModel',
+          label: '型号',
+          type: 'string',
+          placeholder: '请输入型号',
+          rules: [{ required: true, min: 5, message: '型号至少为 5 个字符' }]
+        }, {
+          name: 'strProductCategoryName_cn',
+          label: '名称',
+          type: 'string',
+          placeholder: '请输入名称',
+          rules: [{ required: true, min: 5, message: '描述至少为 5 个字符' }]
+        }, {
+          name: 'strProductCategoryDescription_cn',
+          label: '描述',
+          type: 'string',
+          placeholder: '请输入描述',
+          rules: [{ required: true, min: 5, message: '描述至少为 5 个字符' }]
+        }, {
+          name: 'strProductCategoryNote_cn',
+          label: '备注',
+          type: 'string',
+          placeholder: '请输入备注',
+          rules: [{ required: true, message: '备注至少为 5 个字符' }]
+        }
+    ],
+
+    // 添加客户名单
+    // rules 规范可见 https://github.com/yiminghe/async-validator
+    CType: [
+      {
+          name: 'strProductCategoryModel',
+          label: '型号',
+          type: 'string',
+          placeholder: '请输入备注',
+          rules: [{ required: true, message: '备注至少为 5 个字符' }]
+      },{
+          name: 'strProductCategoryName_cn',
+          label: '名称',
+          type: 'string',
+          placeholder: '请输入备注',
+          rules: [{ required: true, message: '备注至少为 5 个字符' }]
+      },{
+          name: 'strProductCategoryDescription_cn',
+          label: '描述',
+          type: 'string',
+          placeholder: '请输入备注',
+          rules: [{ required: true, message: '备注至少为 5 个字符' }]
+      },{
+          name: 'strProductCategoryNote_cn',
+          label: '备注',
+          type: 'string',
+          placeholder: '请输入备注',
+          rules: [{ required: true, message: '备注至少为 5 个字符' }]
+      }
+    ],
+    // 可设置的查询字段
+    RType:[
+      {
+          name: 'ischange',
+          label: '是否过滤',
+          type: 'switch',
+          defaultValue: false
+      }
+    ],
+};
+
+const Feature = FeatureSetConfig(conf);
+
+export default class App extends Component {
 
   constructor(props) {
     super(props)
-    console.log('props.siderInfo=======', props.siderInfo)
+    console.log('props.siderInfo==========', props.siderInfo)
     this.state = {
-      data: [],
-      siderInfo: props.siderInfo
+      siderInfo: props.siderInfo,
+      data: [{
+        key: 0,
+        uProductCategoryUUID: '',
+        strProductCategoryModel: '',
+        strProductCategoryName_cn: '',
+        strProductCategoryDescription_cn: '',
+        strProductCategoryNote_cn: ''
+      }],
+      pagination: {
+        nPageIndex: '1',
+        nPageSize: '8'
+      },
+      params: {
+        nPageIndex: '1',
+        nPageSize: '8',
+        strKeyWord: ""
+      },
+      loading: false
     }
     seft = this;
-    this.Uiproject_List()
   }
 
   onchangeHandle_callback = (key) => {
@@ -35,71 +248,6 @@ export default class Feature extends Component {
 
   onSelect = (selectedKeys, info) => {
     console.log('selected', selectedKeys, info);
-  }
-
-  handleClick = (e) => {
-    if(e.key == 5){
-      console.log('e.key=====', e.key)
-      windows.location.href = 'http://localhost:8989/#/Feature1-3?_k=6xoiy9';
-    } else {
-      console.log('e.key=====', e.key)
-      windows.location.href = 'http://localhost:8989/#/Feature1-2?_k=ihycok';
-    }
-  }
-
-  Uiproject_List = (e) => {
-      var obj = {
-          //uProjectUUID : 0 ,    // ¹¤³ÌUUID
-      };
-
-      this.DoPost_Project("Uiproject_List",obj,function(res){
-          console.log('Uiproject_List=====', res.obj)
-          var Ui_list = res.obj || []
-          var templist = []
-          Ui_list.forEach(function(item, index){
-            templist.push({
-                key: index,
-                strUIProjectName: item.strUIProjectName,
-                strUIProjectDescription: item.strUIProjectDescription,
-                pricing: '253.45',
-                nUIProjectFlag: item.nUIProjectFlag == 1 ? '开发中' : '已发布',
-                dtUIProjectUpdateTime_UTC: item.dtUIProjectUpdateTime_UTC,
-                op: '1'
-              })
-          })
-
-          seft.setState({
-             data: templist
-           })
-      });
-  }
-
-  DoPost_Project = (func,obj,cb) => {
-    var url = "http://dev.top-link.me/dev/Handler_Uiproject_V1.ashx";
-    return this.DoPost(url,func,obj,cb);
-  }
-
-  DoPost = (url,func,obj,cb) => {
-
-        var req = new TRequest();
-
-        console.log(func);
-        // exec : function (url, op, obj, cb, err)
-        req.exec(url, func, obj,
-            // success:
-            function (json){
-
-               cb(json);            //cbÊÇÒ»¸öº¯Êý£¬ÕâÀïµ÷ÓÃÁËÕâ¸öº¯Êý£¬È»ºó¸øÁË²ÎÊý¡£
-
-               return ;
-            },
-            // error:
-
-            function (json) {
-
-            });
-
-        return ;
   }
 
   showConfirm = () => {
@@ -122,82 +270,10 @@ export default class Feature extends Component {
   }
 
   render() {
-    console.log('this.state===',this.state)
-    const columns = [{
-        title: '工程名称',
-        dataIndex: 'strUIProjectName',
-        render: text => <a href="#">{text}</a>,
-      }, {
-        title: '描述',
-        dataIndex: 'strUIProjectDescription',
-      }, {
-        title: '定价',
-        dataIndex: 'pricing',
-      }, {
-        title: '状态',
-        dataIndex: 'nUIProjectFlag',
-      }, {
-        title: '更新时间',
-        dataIndex: 'dtUIProjectUpdateTime_UTC',
-      }, {
-        title: '操作',
-        dataIndex: 'uUIProjectUUID',
-        render: (text, record) => (
-          <span>
-            <a onClick={ () => { seft.HandleViewPl( text ) } }>查看</a>
-            <span className="ant-divider" />
-            <a onClick={ () => { seft.HandleDeletePl( text ) } }>删除</a>
-          </span>
-        )
-    }]
-
-    // rowSelection object indicates the need for row selection
-    const rowSelection = {
-      onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-      },
-      getCheckboxProps: record => ({
-        disabled: record.name === 'Disabled User',    // Column configuration not to be checked
-      }),
-    };
-
-    const MeduleInfo = {
-      opName: "Ul工程项目添加",
-      modleName: "UIproject",
-      op: "_Add",
-      uDevModelUUID: "0",
-      CType: [
-          {
-              name: 'strUIProjectName',
-              label: '工程名',
-              type: 'string',
-              placeholder: '请输入PL工程名称',
-              rules: [{ required: true, min: 5, message: '用户名至少为 5 个字符' }]
-          }
-      ]
-    }
-
-    const operations = FormG(MeduleInfo);
     return (
       <div>
         <SubSider {...this.state.siderInfo}/>
-        <Tabs defaultActiveKey="1"
-              onChange={this.onchangeHandle_callback}
-              tabBarExtraContent={operations}
-              style={{ }}>
-         <TabPane tab="全部" key="1">
-           <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
-         </TabPane>
-         <TabPane tab="已发布" key="2">
-           <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
-         </TabPane>
-         <TabPane tab="发布中" key="3">
-           <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
-         </TabPane>
-         <TabPane tab="已停止" key="4">
-           <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
-         </TabPane>
-        </Tabs>
+        <Feature />
       </div>
     )
   }

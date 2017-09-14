@@ -44,35 +44,52 @@ const Config = {
   modelCategory: {
     menu: [
       {
-        title: '设备型号',
+        title: '拓斯达',
         key: 'sub1',
         icon: 'bars',
         items: [
           {
-            title: '型号列表',
-            key: 'Feature1-5'
+            title: '(1.22)干燥机',
+            key: '12',
+            items: [
+              {
+                title: '(1.01.01)横走式单轴伺服机械手',
+                key: '19',
+              }, {
+                title: '(1.01.02)横走式单轴双截伺服机械手',
+                key: '20',
+              }, {
+                title: '(1.01.03)横走式多轴伺服机械手',
+                key: '21',
+              }, {
+                title: '(1.01.04)横走式多轴双截伺服机械手',
+                key: '22',
+              }
+            ]
           }, {
-            title: '配置管理',
-            key: 'Feature2-1'
-          }
-        ]
-      }, {
-        title: '设备列表',
-        key: 'sub2',
-        icon: 'bars',
-        items: [
-          {
-            title: '设备列表',
-            key: 'Feature2-1'
+            title: '(1.20)模温机',
+            key: '13'
           }, {
-            title: '配置管理',
-            key: 'Feature2-2'
+            title: '(1.01)机械手',
+            key: '14'
+          }, {
+            title: '(1.23)除湿机',
+            key: '15'
+          }, {
+            title: '(1.24)三机一体',
+            key: '16'
+          }, {
+            title: '(1.25)粉碎机',
+            key: '17'
+          }, {
+            title: '(1.26)输送带',
+            key: '18'
           }
         ]
       }
     ],
     title: '设备管理',
-    serve: 'http://dev.top-link.me/dev/Handler_Plproject_V1.ashx',
+    remote: 't_iec_product_category',
     openKeys: ['sub1'],
     selectedKey: 'Feature1-5',
     style: {}

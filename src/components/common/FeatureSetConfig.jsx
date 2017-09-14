@@ -9,7 +9,6 @@ import { Upload, Modal, message, Spin} from 'antd';
 import { Link } from 'dva/router';
 
 import Immutable from 'immutable';
-import Reqwest from 'reqwest';
 
 import CFormItem from './CreateFormItem';
 import CTextItem from './CreateTextItem';
@@ -32,10 +31,8 @@ const FeatureSet = (config) => {
                 columns: [],
                 resultList: [],
                 loading: false,
-
                 updateFromShow: false,
                 updateFromItem: {},
-
                 total: 0,
                 pageSize: 10
             }
@@ -52,26 +49,26 @@ const FeatureSet = (config) => {
             const self = this;
 
             let table;
-            if(config.pageData){
+            if (config.pageData) {
                 const pagination = {
                     total: this.state.total,
                     pageSize: this.state.pageSize,
                     onChange: function(num){
                         self.setState({
                             loading: true
-                        });
-                        self.getpageData(num);
+                        })
+                        self.getpageData(num)
                     }
                 }
 
-                table = <Table dataSource={this.state.resultList} columns={this.state.columns} loading={this.state.loading} pagination={pagination} bordered/>;
-            }else{
-                table = <Table dataSource={this.state.resultList} columns={this.state.columns} loading={this.state.loading} bordered/>;
+                table = <Table dataSource={this.state.resultList} columns={this.state.columns} loading={this.state.loading} pagination={pagination} />;
+            } else {
+                table = <Table dataSource={this.state.resultList} columns={this.state.columns} loading={this.state.loading} />;
             }
 
-            return  <div className={this.props.className}>
-                      <RForm RType={config.RType} submit={self.handleRetrieve}/>
-                      <CForm CType={config.CType} submit={self.handleCreate}/>
+            return  <div className={this.props.className} >
+                      <RForm RType={config.RType} submit={self.handleRetrieve} />
+                      <CForm CType={config.CType} submit={self.handleCreate} />
                       <UForm UType={config.UType} submit={self.handleUpdate} isShow={this.state.updateFromShow} updateItem={this.state.updateFromItem} hideForm={this.hideUpdateForm}/>
                       {table}
                     </div>
@@ -114,8 +111,6 @@ const FeatureSet = (config) => {
                                                 </span>
                                             );
                                         }
-
-
                                     })
                                 }
                                 </span>
@@ -153,56 +148,67 @@ const FeatureSet = (config) => {
 
         handleCreate: function(info){
             const self = this;
-
             config.Create(info, function(item){
-                // 初级接口的坑
-                if(!item){
-                    config.initData(function(list){
-                        self.setState({
-                            loading: false,
-                            resultList: list
-                        });
-                    });
-                    return;
+              // 初级接口的坑
+              if(!item){
+                config.initData(function(list){
+                  self.setState({
+                      loading: false,
+                      resultList: list
+                  })
+                })
+                return
+              }
+
+
+              let lists = self.state.resultList;
+
+              self.state.resultList.unshift(item);
+
+              let result = Immutable.fromJS(self.state.resultList)
+
+              let resultList = result.map( function(v, i) {
+                if (v.get('key') == item.key) {
+                  return Immutable.fromJS(item)
+                } else {
+                  return v
                 }
-
-                let lists = self.state.resultList;
-                lists.unshift(item);
-
-                self.setState({
-                    loading: false,
-                    resultList: lists
-                });
-            });
+              })
+              self.setState({
+                loading: false,
+                resultList: resultList.toJS()
+              })
+            })
         },
 
         handleUpdate: function(info){
-            const self = this;
-            let result = Immutable.fromJS(self.state.resultList);
+          const self = this;
+          let result = Immutable.fromJS(self.state.resultList);
 
-            let infoN = Immutable.fromJS(self.state.updateFromItem).merge(info).toJS();
-            config.Update(infoN, function(item){
-                let resultList = result.map(function(v, i){
-                    if(v.get('key') === item.key){
-                        return Immutable.fromJS(item);
-                    }else{
-                        return v;
-                    }
-                });
-                message.success('更新成功');
+          let infoN = Immutable.fromJS(self.state.updateFromItem).merge(info).toJS();
+          config.Update(infoN, function (item) {
+            let resultList = result.map( function(v, i) {
+              if(v.get('key') == item.key){
+                return Immutable.fromJS(item)
+              }else{
+                return v
+              }
+            })
 
-                self.setState({
-                    loading: false,
-                    updateFromShow: false,
-                    resultList: resultList.toJS()
-                });
+            message.success('更新成功')
+
+            self.setState({
+              loading: false,
+              updateFromShow: false,
+              resultList: resultList.toJS()
             });
+          });
         },
         hideUpdateForm: function(){
-            this.setState({
-                updateFromShow: false,
-                updateFromItem: {}
-            });
+          this.setState({
+            updateFromShow: false,
+            updateFromItem: {}
+          })
         },
 
         // 搜索更新处理
@@ -210,7 +216,7 @@ const FeatureSet = (config) => {
             const self = this;
             self.setState({
                 loading: true
-            });
+            })
 
             config.Retrieve(info, function(list){
                 self.setState({
@@ -233,30 +239,29 @@ const FeatureSet = (config) => {
 
                 // table 操作栏目通用设定为 更新与删除 两项
                 if(type === 'update'){
-                    this.setState({
-                        updateFromShow: true,
-                        updateFromItem: itemI.toJS()
-                    });
+                  this.setState({
+                      updateFromShow: true,
+                      updateFromItem: itemI.toJS()
+                  });
                 }else if(type === 'delete'){
                     this.setState({
-                        loading: true
-                    });
+                      loading: true
+                    })
 
                     config.Delete(itemI.toJS(), function(){
-                        resultList = result.filter(function(v, i){
-                            if(v.get('key') !== itemI.get('key')){
-                                return true;
-                            }
-                        });
-                        message.success('删除成功');
+                      resultList = result.filter(function(v, i){
+                          if(v.get('key') !== itemI.get('key')){
+                              return true;
+                          }
+                      })
+                      message.success('删除成功');
 
-                        self.setState({
-                            loading: false,
-                            resultList: resultList.toJS()
-                        });
-                    });
+                      self.setState({
+                          loading: false,
+                          resultList: resultList.toJS()
+                      })
+                    })
                 }
-
 
             }else if(btn.callback){
                 btn.callback(item);
@@ -290,10 +295,9 @@ const FeatureSet = (config) => {
                     loading: false,
                     resultList: list,
                     total: info.total,
-                    pageSize: info.pageSize||10,
+                    pageSize: info.nPageSize || 10,
                 });
             });
-
         }
     });
 
@@ -351,6 +355,7 @@ const FeatureSet = (config) => {
                         </Form>
                         {
                             operate.map(function(btn){
+
                                 return <Button key={btn.text} type="primary" size="large" onClick={self.operateCallbacks.bind(self, btn)} style={btn.style}>{btn.text}</Button>
                             })
                         }

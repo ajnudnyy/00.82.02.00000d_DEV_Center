@@ -14,6 +14,7 @@
     "immutable": "^3.8.1",
     "moment": "^2.15.2",
     "react": "^15.1.0",
+    "react-amap": "^1.0.3",
     "react-bootstrap": "^0.31.2",
     "react-copy-to-clipboard": "^4.2.3",
     "react-dom": "^15.1.0",

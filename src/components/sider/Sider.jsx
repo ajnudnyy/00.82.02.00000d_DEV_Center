@@ -3,6 +3,7 @@ import { Menu, Icon } from 'antd';
 import { Link } from 'dva/router';
 
 const MenuItemCreat  = (items) => {
+  console.log('items==============', items)
         return items.map(function(item){
             if(item.items){
                 let title = <span>{item.icon ? (<Icon type={item.icon} />): ''}<span>{item.title}</span></span>;
@@ -21,8 +22,8 @@ const MenuItemCreat  = (items) => {
 };
 
 function Sider(props){
-    console.log('props====', props)
     return  <div className="sider" style={props.style}>
+               <div className="logo" style={{height: '32px', textAlign: 'center', background: '#eeeee',borderRadius: '6px',margin: '0.5px'}}>菜单</div>
                <Menu  defaultOpenKeys={props.openKeys}
                       mode="inline">
                     {

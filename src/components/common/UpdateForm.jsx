@@ -41,18 +41,19 @@ let UForm = React.createClass({
     },
 
     handleUpdate: function(){
-        this.props.submit(this.props.form.getFieldsValue());
+        this.props.submit(this.props.form.getFieldsValue())
     },
 
     handleReset: function() {
-        this.props.form.resetFields();
+        this.props.form.resetFields()
     },
 
     hideModal: function() {
-        this.props.hideForm();
-        this.handleReset();
+        this.props.hideForm()
+        this.handleReset()
     }
-});
-UForm = Form.create()(UForm);
+})
 
-export default UForm;
+UForm = Form.create()(UForm)
+
+export default UForm

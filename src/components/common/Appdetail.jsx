@@ -46,7 +46,7 @@ class Appdetail extends Component {
     return (
         <ButtonToolbar style={{display: 'inline-block'}}>
           <a onClick={this.showModal}>
-            新建工程
+            编辑
           </a>
         <Modal
           {...this.props}

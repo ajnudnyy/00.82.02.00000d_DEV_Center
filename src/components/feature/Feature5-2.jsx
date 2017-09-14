@@ -159,7 +159,7 @@ export default class Feature extends Component {
       uDevModelUUID: "0"
     }
 
-    const operations = FormG(MeduleInfo);
+    const operations = <Button>添加APP</Button> ;
 
     return (
       <div style={{height: '100%'}}>
@@ -189,7 +189,7 @@ export default class Feature extends Component {
                     <Badge status="processing"/>
                     <span>正常: 2017-10-01</span>
                     <span style={{float: 'right'}}>
-                      <Link to={'/Feature5-1'}>新建工程</Link>
+                      <Link to={'/Feature5-1'}>编辑</Link>
                       <span className="ant-divider" />
                         <Dropdown overlay={ Menumodel }>
                           <a className="ant-dropdown-link">
@@ -249,7 +249,7 @@ export default class Feature extends Component {
                     <Badge status="processing"/>
                     <span>正常: 2017-10-01</span>
                     <span style={{float: 'right'}}>
-                      <a href="https://www.baidu.com" target="_blank">等下</a>
+                      <a href="https://www.baidu.com" target="_blank">编辑</a>
                       <span className="ant-divider" />
                         <Dropdown overlay={ Menumodel }>
                           <a className="ant-dropdown-link">

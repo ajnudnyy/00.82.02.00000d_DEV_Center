@@ -16,7 +16,7 @@ let CForm = React.createClass({
     render: function() {
 
         MeduleInfo = this.props.MeduleInfo
-        const CType = typeof MeduleInfo == 'undefined' ? this.props.CType : MeduleInfo.CType;
+        const CType = typeof this.props.CType != 'undefined' ? this.props.CType : MeduleInfo.CType;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: { span: 4 },
@@ -24,9 +24,9 @@ let CForm = React.createClass({
         }
 
         return  CType ?
-                <div className="create">
-                  <Button type="primary" icon="plus-circle-o" onClick={this.showModal}>{MeduleInfo.opName}</Button>
-                  <Modal title={MeduleInfo.opName} visible={this.state.visible} onOk={this.handleCreate} onCancel={this.hideModal}>
+                <div className="create create-extra">
+                  <Button type="primary" icon="plus-circle-o" onClick={this.showModal}>添加</Button>
+                  <Modal title='添加新对象' visible={this.state.visible} onOk={this.handleCreate} onCancel={this.hideModal}>
                     <Form layout="horizontal">
                       {
                         CType.map(function(item, index){
@@ -41,28 +41,20 @@ let CForm = React.createClass({
     },
 
     handleCreate: function(){
+      console.log('收到表单值：', this.props.form.getFieldsValue());
 
-        console.log('收到表单值: ', this.props.form.getFieldsValue());
-
-        this.props.form.validateFields((errors, values) => {
-            self = this
-            if (!!errors) {
-                message.info('表单格式不正确');
-                return;
-            } else {
-                HandleCreate(MeduleInfo, this.props.form.getFieldsValue(), function(){
-                  self.hideModal();
-                  message.success('操作成功');
-                  //window.location.reload()
-                },
-                function(){
-                  self.hideModal();
-                  message.info('提交失败');
-                }
-              )
-            }
-        });
-        //this.props.submit(this.props.form.getFieldsValue());
+      this.props.form.validateFields((errors, values) => {
+          if (!!errors) {
+              console.log('Errors in form!!!');
+              message.error('添加失败')
+              return;
+          }else{
+              console.log('Submit!!!');
+              this.props.submit(values);
+              this.hideModal();
+              message.success('添加成功')
+          }
+      });
     },
 
     handleReset: function() {

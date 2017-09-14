@@ -57,10 +57,14 @@ export default class App extends Component {
   }
 
   handleMenuClick  = (e) => {
-    console.log('e.key=======',e.key)
     switch(e.key)
     {
-    case '1':
+    case '6':
+      this.setState({
+        siderInfo: config.modelCategory
+      });
+      break;
+    case '7':
       this.setState({
         siderInfo: config.modelCategory
       });
@@ -121,18 +125,31 @@ export default class App extends Component {
                        collapsed={this.state.collapsible}
                        onCollapse={this.onCollapse}>
                   <div className="logo" style={{height: '32px',background: '#333',borderRadius: '6px',margin: '16px'}}>LOGO</div>
-                  <Menu
-                        theme="dark"
+                  <Menu theme="dark"
                         defaultSelectedKeys={['1']}
                         defaultOpenKeys={['sub1']}
                         onSelect={this.handleMenuClick}
                         mode="inline">
-                    <Menu.Item key="1">
-                      <Link to={'/Feature1-5'}>
-                       <Icon type="desktop" className="icons"/>
-                       <span>设备管理</span>
-                      </Link>
-                    </Menu.Item>
+                    <SubMenu
+                      key="1"
+                      title={
+                        <span>
+                          <Icon type="user" />
+                          <span>设备管理</span>
+                        </span>}>
+                      <Menu.Item key="6">
+                        <Link to={'/Feature1-5'}>
+                         <Icon type="menu-fold" className="icons"/>
+                         <span>型号分类</span>
+                        </Link>
+                      </Menu.Item>
+                      <Menu.Item key="7">
+                        <Link to={'/Feature1-6'}>
+                          <Icon type="search" className="icons"/>
+                          <span>设备查询</span>
+                        </Link>
+                      </Menu.Item>
+                    </SubMenu>
                     <Menu.Item key="2">
                       <Link to={'/Feature1-1'}>
                        <Icon type="home" className="icons"/>

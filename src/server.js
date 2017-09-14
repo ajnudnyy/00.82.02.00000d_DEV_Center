@@ -76,6 +76,10 @@ const getParam = (MeduleInfo) => {
   }
 }
 
+function HandleCreateform (url, dat, cb, failcb) {
+  DoPost(url, dat, cb, failcb);
+}
+
 function HandleCreate(MeduleInfo, dat, cb, failcb) {
   let redat = dat
   redat.uDevModelUUID = '0'
@@ -86,5 +90,6 @@ export {
   plInfo,
   getParam,
   DoPost,
+  HandleCreateform,
   HandleCreate
 }

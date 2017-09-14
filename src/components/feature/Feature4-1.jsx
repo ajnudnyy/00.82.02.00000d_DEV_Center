@@ -123,21 +123,23 @@ export default class Feature extends Component {
 
   render() {
     console.log('this.state===',this.state)
-    const columns = [{
-      title: '工程名称',
-      dataIndex: 'strPLProjectName',
-      render: text => <a href="#">{text}</a>,
-    }, {
-      title: '描述',
-      dataIndex: 'strPLProjectDescription',
-    }, {
-      title: '更新时间',
-      dataIndex: 'strPLProjectNote',
-    }, {
-      title: '操作',
-      dataIndex: 'uPLProjectUUID',
-      render: text => <Button type="primary" style={{ height: '18px', padding: '0 9px' }} onClick={this.showConfirm}>查看</Button>,
-    }]
+    const columns = [
+        {
+        title: '工程名称',
+        dataIndex: 'strPLProjectName',
+        render: text => <a href="#">{text}</a>,
+      }, {
+        title: '描述',
+        dataIndex: 'strPLProjectDescription',
+      }, {
+        title: '更新时间',
+        dataIndex: 'strPLProjectNote',
+      }, {
+        title: '操作',
+        dataIndex: 'uPLProjectUUID',
+        render: text => <Button type="primary" style={{ height: '18px', padding: '0 9px' }} onClick={this.showConfirm}>查看</Button>,
+      }
+    ]
 
     // rowSelection object indicates the need for row selection
     const rowSelection = {
@@ -189,7 +191,7 @@ export default class Feature extends Component {
                 <Col span={8}>
                   <Card style={{ marginBottom: '3%', borderRadius: '3%', border: '1px solid #d9edfc' }} bodyStyle={{ padding: '2px 22px' }}>
                     <div className="custom-image" style={{ borderBottom: 'solid 1px #e9e9e9'}}>
-                      
+
                     </div>
                     <div className="custom-card" style={{ lineHeight: '39px' }}>
                       <Badge status="processing"/>

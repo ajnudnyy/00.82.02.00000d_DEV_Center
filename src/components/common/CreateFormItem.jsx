@@ -26,7 +26,6 @@ let CFormItem = React.createClass({
         const item = this.props.item || {};
 
         let defaultValue = item.defaultValue || '';
-        console.log('CFormItem===========', item)
         switch (item.type){
             case 'string':
                 return <FormItem label={item.label}
@@ -147,13 +146,11 @@ let CFormItem = React.createClass({
         }
     },
     uploadSuccess: function(url){
-        console.log(url)
         this.setState({
             img_url: url
         })
     },
     changeImgUrl: function(e){
-        console.log(e.target.value)
         this.setState({
             img_url: e.target.value
         })
